@@ -1,21 +1,18 @@
 import express from 'express';
-import cors from 'cors'
+import dotenv from 'dotenv';
+import { ConnectDB } from './lib/Db.js';
+import authroutes from './routes/auth.route.js'
+dotenv.config();
 const app = express();
-const PORT = 8000;
 app.use(express.json());
-app.use(cors());
-
-app.post('/bmi', (req, res) => {
-    const { weight, height } = req.body;
-    console.log(weight,height)
-    const heightInMeters = height / 100;
-    const bmi = weight / (heightInMeters * heightInMeters);
-    return res.json({ "bmi": bmi });
-});
 
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+
+app.use('/api/auth',authroutes);
+
+app.listen(process.env.PORT,()=>{
+    console.log(`Server Started At PORT ${process.env.PORT}`)
+    ConnectDB();
+})
